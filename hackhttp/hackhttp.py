@@ -389,14 +389,14 @@ class hackhttp():
                         # check cookie path
                         if path.find(m['path']) != 0:
                             continue
-                        expires = m['expires']
-                        if not expires:
-                            continue
-                        # print 'expires',expires 
-                        #TODO expires time parse error when have more than one Set-Cookie.
-                        # check cookie expires time
-                        if cookielib.http2time(expires) < time.time():
-                            del c[k]
+                        # expires = m['expires']
+                        # if not expires:
+                            # continue
+                        # # print 'expires',expires 
+                        # #TODO expires time parse error when have more than one Set-Cookie.
+                        # # check cookie expires time
+                        # if cookielib.http2time(expires) < time.time():
+                            # del c[k]
                     cookie_str = join_cookie(cookie_str, c.output(attrs=[], header='', sep=';').strip())
                     
                 # c = self.cookiepool.get(host,None)
@@ -404,8 +404,7 @@ class hackhttp():
                     # c = self.cookiepool.get(host)
                     
                 if 'Cookie' in tmpheaders:
-                    if cookie_str:
-                        cookie_str = join_cookie(cookie_str, tmpheaders['Cookie'].strip())
+                    cookie_str = join_cookie(cookie_str, tmpheaders['Cookie'].strip())
                     
                 if cookie_str:
                     tmpheaders['Cookie'] = cookie_str
@@ -519,13 +518,3 @@ class hackhttp():
         return self._http(
             url, post=rawbody, headers=headers, method=command,
             proxy=proxy, cookcookie=cookcookie, location=location)
-            
-if __name__ == '__main__':
-    hh = hackhttp( cookie_str = 'a=1')
-    _,head,body,_,log = hh.http("http://112.16.80.48/cgi-bin/checkCookie", cookie = 'a=1')
-    _,head,body,_,log = hh.http("https://github.com/")
-    _,head,body,_,log = hh.http("https://github.com/")
-    _,head,body,_,log = hh.http("https://github.com/")
-    _,head,body,_,log = hh.http("https://github.com/")
-    print head
-    print log['request']
